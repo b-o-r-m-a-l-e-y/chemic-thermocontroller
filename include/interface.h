@@ -3,7 +3,7 @@
 
 #include "device.h"
 
-void processSerial();
+void processSerial(struct device_t*);
 void sendTelemetry(struct device_t*);
 
 #endif

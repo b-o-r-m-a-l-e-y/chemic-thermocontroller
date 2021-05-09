@@ -8,10 +8,10 @@
 struct device_t
 {
     settings_t  settings;
-    float       actualTemperature;
-    float       internalTemperature;
+    float      actualTemperature;
+    float      internalTemperature;
     uint8_t     flagsThermocouple;
-    float       magnetTemperature;
+    float      magnetTemperature;
 };
 
 void configureDevice(struct device_t*);

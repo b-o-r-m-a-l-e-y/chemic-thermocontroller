@@ -2,7 +2,7 @@
 #include "interface.h"
 #include "Arduino.h"
 
-void processSerial()
+void processSerial(struct device_t* d)
 {
     if(Serial.available())
     {
@@ -44,10 +44,10 @@ void processSerial()
 void sendTelemetry(struct device_t* d)
 {
     char buffer[128];
-    char thermopairTempS[6];
-    char requiredTemp[6];
+    char thermopairTempS[10];
+    char internalTemp[10];
     dtostrf(d->actualTemperature, 5, 2, thermopairTempS);
-    dtostrf(d->settings.requiredTemperature, 5, 2, requiredTemp);
-    sprintf("Ta: %s Tr: %s\r\n", thermopairTempS, requiredTemp);
+    dtostrf(d->internalTemperature, 5, 2, internalTemp);
+    sprintf(buffer, "Ta: %s Ti: %s\r\n", thermopairTempS, internalTemp);
     Serial.print(buffer);
 }

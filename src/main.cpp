@@ -16,7 +16,7 @@ void loop() {
     while(1)
     {
         temperatureMeasurement(&device);
-        processSerial();
+        processSerial(&device);
         if (millis() - prevTime >= device.settings.telemetryPeriod)
         {
             sendTelemetry(&device);
