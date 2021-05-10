@@ -14,6 +14,7 @@ void loop() {
     configureDevice(&device);
     uint32_t prevTime = 0;
     uint32_t prevTimeDimmer = 0;
+    device.dimmer.requriedPowerValue = 32;
     while(1)
     {
         temperatureMeasurement(&device);
