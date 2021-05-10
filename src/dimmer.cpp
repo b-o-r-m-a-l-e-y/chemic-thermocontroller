@@ -24,4 +24,5 @@ void processDimmerMeasurements(struct dimmerConf_t* d)
     digitalWrite(HEATERS_PIN, pinState);
     //d->lastPinState = pinState;
     d->lastIdealValue = idealValue;
+    d->halfPeriodCtr++;
 }
