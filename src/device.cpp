@@ -6,6 +6,7 @@ void configureDevice(struct device_t* d)
 {
     Serial.begin(9600);
     thermocouple.begin();
+    configureDimmer(&(d->dimmer));
     // Load settings
     loadDefaultSettings(&(d->settings));
 }

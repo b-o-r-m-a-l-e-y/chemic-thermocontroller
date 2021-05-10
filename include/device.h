@@ -2,12 +2,14 @@
 #define DEVICE_H
 
 #include "settings.h"
+#include "dimmer.h"
 #include "board.h"
 #include "Adafruit_MAX31855.h"
 
 struct device_t
 {
     settings_t  settings;
+    dimmerConf_t dimmer;
     float      actualTemperature;
     float      internalTemperature;
     uint8_t     flagsThermocouple;

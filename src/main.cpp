@@ -13,6 +13,7 @@ void setup() {
 void loop() {
     configureDevice(&device);
     uint32_t prevTime = 0;
+    uint32_t prevTimeDimmer = 0;
     while(1)
     {
         temperatureMeasurement(&device);
@@ -21,6 +22,10 @@ void loop() {
         {
             sendTelemetry(&device);
             prevTime = millis();
+        }
+        if (millis() - prevTimeDimmer >= 10)
+        {
+            processDimmerMeasurements(&(device.dimmer));
         }
         delay(10);
     }
