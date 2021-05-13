@@ -11,6 +11,7 @@ void configureDevice(struct device_t* d)
     // Load settings
     loadDefaultSettings(&(d->settings));
     configureScheduler(&(d->settings), d->pSheduler);
+    configureRegulator(&(d->regulator), DEFAULT_KP, DEFAULT_KI, DEFAULT_T);
     d->dimmer.requriedPowerValue = 32;
     Timer1.initialize(1000);
     Timer1.attachInterrupt(timerCallback);

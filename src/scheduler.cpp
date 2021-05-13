@@ -18,7 +18,7 @@ void configureScheduler(struct settings_t* s, struct scheduler_t* pSheduler)
 void timerCallback()
 {
     scheduler.msCounter++;
-    if (scheduler.msCounter - scheduler.prevRegulatoryTaskMsCtr >= 10) {
+    if (scheduler.msCounter - scheduler.prevRegulatoryTaskMsCtr >= 20) {
         scheduler.regulatorTask = 1;
         scheduler.prevRegulatoryTaskMsCtr = scheduler.msCounter;
     }

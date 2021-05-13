@@ -5,6 +5,7 @@
 
 #define DEFAULT_KP      0.5
 #define DEFAULT_KI      0.1
+#define DEFAULT_T       20
 
 struct regulator_t
 {
@@ -15,7 +16,7 @@ struct regulator_t
     uint16_t output;
 };
 
-void configureRegulator(struct regulator_t*);
+void configureRegulator(struct regulator_t*,  float kI, float kP, float interval);
 uint16_t updateRegulator(struct regulator_t*);
 
 #endif

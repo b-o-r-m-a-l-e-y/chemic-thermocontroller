@@ -6,11 +6,13 @@
 #include "board.h"
 #include "Adafruit_MAX31855.h"
 #include "scheduler.h"
+#include "regulator.h"
 
 struct device_t
 {
     struct settings_t settings;
     struct dimmerConf_t dimmer;
+    struct regulator_t regulator;
     struct scheduler_t* pSheduler; 
     float      actualTemperature;
     float      internalTemperature;
