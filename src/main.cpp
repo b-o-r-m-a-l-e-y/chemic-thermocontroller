@@ -4,6 +4,7 @@
 #include "board.h"
 #include "device.h"
 #include "interface.h"
+#include "TimerOne.h"
 
 struct device_t device;
 
@@ -15,6 +16,9 @@ void loop() {
     uint32_t prevTime = 0;
     uint32_t prevTimeDimmer = 0;
     device.dimmer.requriedPowerValue = 32;
+    Timer1.initialize(1000);
+    Timer1.attachInterrupt(timerCallback);
+    Timer1.start();
     while(1)
     {
         temperatureMeasurement(&device);
@@ -28,6 +32,5 @@ void loop() {
         {
             processDimmerMeasurements(&(device.dimmer));
         }
-        delay(10);
     }
 }

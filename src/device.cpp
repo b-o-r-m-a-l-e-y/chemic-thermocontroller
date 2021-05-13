@@ -9,6 +9,7 @@ void configureDevice(struct device_t* d)
     configureDimmer(&(d->dimmer));
     // Load settings
     loadDefaultSettings(&(d->settings));
+    configureScheduler(&(d->settings), d->pSheduler);
 }
 
 void temperatureMeasurement(struct device_t* d)

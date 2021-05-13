@@ -5,11 +5,13 @@
 #include "dimmer.h"
 #include "board.h"
 #include "Adafruit_MAX31855.h"
+#include "scheduler.h"
 
 struct device_t
 {
-    settings_t  settings;
-    dimmerConf_t dimmer;
+    struct settings_t settings;
+    struct dimmerConf_t dimmer;
+    struct scheduler_t* pSheduler; 
     float      actualTemperature;
     float      internalTemperature;
     uint8_t     flagsThermocouple;
