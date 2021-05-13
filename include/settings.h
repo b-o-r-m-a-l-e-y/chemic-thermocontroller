@@ -9,12 +9,13 @@ struct settings_t
     float       requiredTemperature;
     uint8_t     tempControlEnabled;
     uint8_t     magnetPower;
-    // PI coefficients
 };
 
 struct settingsFlash_t
 {
     uint16_t    telemetryPeriod;
+    float       kI;
+    float       kP;
     uint16_t    crc16;
 };
 

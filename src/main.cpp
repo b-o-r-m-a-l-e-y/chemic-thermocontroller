@@ -13,24 +13,11 @@ void setup() {
 
 void loop() {
     configureDevice(&device);
-    uint32_t prevTime = 0;
-    uint32_t prevTimeDimmer = 0;
-    device.dimmer.requriedPowerValue = 32;
-    Timer1.initialize(1000);
-    Timer1.attachInterrupt(timerCallback);
-    Timer1.start();
     while(1)
     {
         temperatureMeasurement(&device);
         processSerial(&device);
-        if (millis() - prevTime >= device.settings.telemetryPeriod)
-        {
-            sendTelemetry(&device);
-            prevTime = millis();
-        }
-        if (millis() - prevTimeDimmer >= 10)
-        {
-            processDimmerMeasurements(&(device.dimmer));
-        }
+        if (device.pSheduler->telemetryTask) sendTelemetry(&device);
+        if (device.pSheduler->regulatorTask) processDimmerMeasurements(&(device.dimmer));
     }
 }
