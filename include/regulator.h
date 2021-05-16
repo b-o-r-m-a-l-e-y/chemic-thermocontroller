@@ -17,6 +17,6 @@ struct regulator_t
 };
 
 void configureRegulator(struct regulator_t*,  float kI, float kP, float interval);
-uint16_t updateRegulator(struct regulator_t*);
+uint16_t updateRegulator(struct regulator_t*, float requiredValue, float realValue);
 
 #endif

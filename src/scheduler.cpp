@@ -10,8 +10,10 @@ void configureScheduler(struct settings_t* s, struct scheduler_t* pSheduler)
     scheduler.msCounter = 0;
     scheduler.regulatorTask = 0;
     scheduler.telemetryTask = 0;
+    scheduler.measurementTask = 0;
     scheduler.prevRegulatoryTaskMsCtr = 0;
     scheduler.prevTelemetryTaskMsCtr = 0;
+    scheduler.prevMeasurementTaskMsCtr = 0;
     pSheduler = &scheduler;
 }
 
@@ -25,5 +27,9 @@ void timerCallback()
     if (scheduler.msCounter - scheduler.prevTelemetryTaskMsCtr >= scheduler.pSettings->telemetryPeriod) {
         scheduler.telemetryTask = 1;
         scheduler.prevTelemetryTaskMsCtr = scheduler.msCounter;
+    }
+    if (scheduler.msCounter - scheduler.prevMeasurementTaskMsCtr >= 200) {
+        scheduler.measurementTask = 1;
+        scheduler.prevMeasurementTaskMsCtr = scheduler.msCounter;
     }
 }

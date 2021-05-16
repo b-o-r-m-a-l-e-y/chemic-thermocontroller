@@ -4,6 +4,8 @@
 #include "settings.h"
 #include "dimmer.h"
 #include "board.h"
+#include "Wire.h"
+#include "SPI.h"
 #include "Adafruit_MAX31855.h"
 #include "scheduler.h"
 #include "regulator.h"
@@ -22,6 +24,6 @@ struct device_t
 
 void configureDevice(struct device_t*);
 void temperatureMeasurement(struct device_t*);
-void processThermocontrol(struct device_t*);
+void mainLoop(struct device_t* d);
 
 #endif
