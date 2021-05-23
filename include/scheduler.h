@@ -2,7 +2,7 @@
 #define SCHEDULER_H
 
 #include "stdint.h"
-#include "settings.h"
+#include "device.h"
 
 struct scheduler_t
 {
@@ -17,7 +17,7 @@ struct scheduler_t
     struct settings_t* pSettings;
 };
 
-void configureScheduler(struct settings_t*, struct scheduler_t*);
+void configureScheduler(struct device_t*);
 void timerCallback();
 
 #endif

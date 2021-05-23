@@ -47,7 +47,7 @@ void processSerial(struct device_t* d)
             case 'a':
                 // Set autocontrol mode
                 uint8_t mode;
-                if (sscanf(buffer, "-a %d", &mode)) {
+                if (sscanf(buffer, "-a %u", &(mode))) {
                     d->settings.tempControlEnabled = mode;
                     Serial.println("ACK");
                 }
@@ -56,7 +56,7 @@ void processSerial(struct device_t* d)
             case 'M': {
                 // Set magnet power
                 uint8_t magPowerPercent;
-                if (sscanf(buffer, "-M %d", &magPowerPercent)) {
+                if (sscanf(buffer, "-M %u", &(magPowerPercent))) {
                     uint8_t magPowerPWM = map(magPowerPercent, 0, 100, 0, 255);
                     d->settings.magnetPower = magPowerPWM;
                     Serial.println("ACK");
@@ -118,9 +118,9 @@ void sendSettings(struct device_t *d)
     Serial.print(buffer);
     char coefS[16];
     dtostrf(d->regulator.kP, 5, 5, coefS);
-    sprintf(buffer, "kP: %f\r\n", coefS);
+    sprintf(buffer, "kP: %s\r\n", coefS);
     Serial.print(buffer);
     dtostrf(d->regulator.kI, 5, 5, coefS);
-    sprintf(buffer, "kI: %f\r\n", coefS);
+    sprintf(buffer, "kI: %s\r\n", coefS);
     Serial.print(buffer);
 }

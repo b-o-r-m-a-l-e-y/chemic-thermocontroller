@@ -11,7 +11,7 @@ void configureDevice(struct device_t* d)
     configureDimmer(&(d->dimmer));
     // Load settings
     loadDefaultSettings(&(d->settings));
-    configureScheduler(&(d->settings), d->pSheduler);
+    configureScheduler(d);
     configureRegulator(&(d->regulator), DEFAULT_KP, DEFAULT_KI, DEFAULT_T);
     // Just for first tests
     d->dimmer.requriedPowerValue = 32;

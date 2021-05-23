@@ -1,11 +1,12 @@
 #include "scheduler.h"
+#include "Arduino.h"
 
 // Sorry for this, but in current realization
 // I couldn`t pass a parameter to timerCallback.
 // Really need to reimplement this
 struct scheduler_t scheduler;
 
-void configureScheduler(struct settings_t* s, struct scheduler_t* pSheduler)
+void configureScheduler(struct device_t* d)
 {
     scheduler.msCounter = 0;
     scheduler.regulatorTask = 0;
@@ -14,7 +15,8 @@ void configureScheduler(struct settings_t* s, struct scheduler_t* pSheduler)
     scheduler.prevRegulatoryTaskMsCtr = 0;
     scheduler.prevTelemetryTaskMsCtr = 0;
     scheduler.prevMeasurementTaskMsCtr = 0;
-    pSheduler = &scheduler;
+    scheduler.pSettings = &(d->settings);
+    d->pSheduler = &scheduler;
 }
 
 void timerCallback()
