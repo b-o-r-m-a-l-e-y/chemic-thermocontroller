@@ -31,7 +31,6 @@ void mainLoop(struct device_t* d)
 {
     while(1)
     {
-        temperatureMeasurement(d);
         processSerial(d);
         if (d->pSheduler->telemetryTask) {
             sendTelemetry(d);

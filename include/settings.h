@@ -9,6 +9,7 @@ struct settings_t
     float       requiredTemperature;
     uint8_t     tempControlEnabled;
     uint8_t     magnetPower;
+    float       temperatureOffset;
 };
 
 struct settingsFlash_t

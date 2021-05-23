@@ -6,4 +6,5 @@ void loadDefaultSettings(struct settings_t* s)
     s->telemetryPeriod = 1000;
     s->tempControlEnabled = 0;
     s->requiredTemperature = 20.0;
+    s->temperatureOffset = 0.0;
 }
