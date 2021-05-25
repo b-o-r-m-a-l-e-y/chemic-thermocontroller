@@ -8,7 +8,7 @@ struct settings_t
     uint16_t    telemetryPeriod;
     float       requiredTemperature;
     uint8_t     tempControlEnabled;
-    uint8_t     magnetPower;
+    uint16_t     magnetPower;
     float       temperatureOffset;
 };
 

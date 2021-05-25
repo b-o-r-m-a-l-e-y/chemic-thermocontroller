@@ -55,10 +55,10 @@ void processSerial(struct device_t* d)
                 break;
             case 'M': {
                 // Set magnet power
-                uint8_t magPowerPercent;
-                if (sscanf(buffer, "-M %u", &(magPowerPercent))) {
-                    uint8_t magPowerPWM = map(magPowerPercent, 0, 100, 0, 255);
-                    d->settings.magnetPower = magPowerPWM;
+                uint16_t magPower;
+                if (sscanf(buffer, "-M %u", &(magPower))) {
+                    d->settings.magnetPower = magPower;
+                    processMagnetPower(d->settings.magnetPower);
                     Serial.println("ACK");
                 }
                 else Serial.println("NACK");

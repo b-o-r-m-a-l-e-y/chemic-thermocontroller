@@ -14,10 +14,12 @@ void configureDevice(struct device_t* d)
     configureScheduler(d);
     configureRegulator(&(d->regulator), DEFAULT_KP, DEFAULT_KI, DEFAULT_T);
     // Just for first tests
-    d->dimmer.requriedPowerValue = 32;
+    d->dimmer.requriedPowerValue = 200;
+    analogWrite(9, 220);
     Timer1.initialize(1000);
     Timer1.attachInterrupt(timerCallback);
     Timer1.start();
+    processMagnetPower(0);
 }
 
 void temperatureMeasurement(struct device_t* d)
@@ -46,4 +48,11 @@ void mainLoop(struct device_t* d)
             d->pSheduler->measurementTask = 0;
         }
     }
+}
+
+void processMagnetPower(uint16_t powerValue)
+{
+    if (powerValue == 0) Timer1.disablePwm(MAGNET_PIN);
+    else if (powerValue >= 1024) Timer1.pwm(MAGNET_PIN, 1024);
+    else Timer1.pwm(MAGNET_PIN, powerValue);
 }

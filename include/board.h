@@ -2,7 +2,7 @@
 #define BOARD_H
 
 #define     THERMOCOUPLE_NCS_PIN    2
-#define     MAGNET_PIN              
+#define     MAGNET_PIN              9
 #define     RELAY_PIN               
 #define     HEATERS_PIN             4
 

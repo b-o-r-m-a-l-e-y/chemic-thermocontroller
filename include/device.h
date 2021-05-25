@@ -25,5 +25,6 @@ struct device_t
 void configureDevice(struct device_t*);
 void temperatureMeasurement(struct device_t*);
 void mainLoop(struct device_t* d);
+void processMagnetPower(uint16_t);
 
 #endif
