@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "interface.h"
 #include "Arduino.h"
+#include "settings.h"
 
 void processSerial(struct device_t* d)
 {
@@ -89,6 +90,7 @@ void processSerial(struct device_t* d)
                 break;
             case 's':
                 // Save parameters
+                saveSettingsInFlash(&(d->settings), &(d->regulator));
                 Serial.println("ACK");
                 break;
             default:

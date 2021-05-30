@@ -10,7 +10,7 @@ void configureDevice(struct device_t* d)
     thermocouple.begin();
     configureDimmer(&(d->dimmer));
     // Load settings
-    loadDefaultSettings(&(d->settings));
+    loadDefaultSettings(&(d->settings), &(d->regulator));
     configureScheduler(d);
     configureRegulator(&(d->regulator), DEFAULT_KP, DEFAULT_KI, DEFAULT_T);
     // Just for first tests

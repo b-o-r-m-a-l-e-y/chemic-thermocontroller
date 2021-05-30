@@ -18,7 +18,7 @@ struct device_t
     struct scheduler_t* pSheduler; 
     float      actualTemperature;
     float      internalTemperature;
-    uint8_t     flagsThermocouple;
+    uint8_t    flagsThermocouple;
     float      magnetTemperature;
 };
 

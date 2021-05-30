@@ -2,13 +2,14 @@
 #define SETTINGS_H
 
 #include "stdint.h"
+#include "regulator.h"
 
 struct settings_t
 {
     uint16_t    telemetryPeriod;
     float       requiredTemperature;
     uint8_t     tempControlEnabled;
-    uint16_t     magnetPower;
+    uint16_t    magnetPower;
     float       temperatureOffset;
 };
 
@@ -17,12 +18,11 @@ struct settingsFlash_t
     uint16_t    telemetryPeriod;
     float       kI;
     float       kP;
-    uint16_t    crc16;
+    uint16_t    crc8;
 };
 
-extern settings_t settings;
-
-void loadDefaultSettings(struct settings_t*);
-void saveSettingsInFlash(struct settings_t*);
+void loadDefaultSettings(struct settings_t*, struct regulator_t*);
+void loadSettingsFromFlash(struct settings_t*, struct regulator_t*);
+void saveSettingsInFlash(struct settings_t*, struct regulator_t*);
 
 #endif
