@@ -73,6 +73,7 @@ void loadSettingsFromFlash(struct settings_t* s, struct regulator_t* r)
     uint8_t crcCheck = crc8((uint8_t*)&fromFlash, sizeof(fromFlash) - sizeof(fromFlash.crc8));
     if (crcCheck == fromFlash.crc8) {
         s->telemetryPeriod = fromFlash.telemetryPeriod;
+        s->temperatureOffset = fromFlash.temperatureOffset;
         r->kP = fromFlash.kP;
         r->kI = fromFlash.kI;
     }
@@ -84,6 +85,7 @@ void saveSettingsInFlash(struct settings_t* s, struct regulator_t* r)
     toFlash.kI = r->kI;
     toFlash.kP = r->kP;
     toFlash.telemetryPeriod = s->telemetryPeriod;
+    toFlash.temperatureOffset = s->temperatureOffset;
     uint8_t crc8New = crc8((uint8_t*) &toFlash, sizeof(toFlash)-sizeof(toFlash.crc8));
     toFlash.crc8 = crc8New;
     eeprom_write_block(&toFlash, 0, sizeof(toFlash));

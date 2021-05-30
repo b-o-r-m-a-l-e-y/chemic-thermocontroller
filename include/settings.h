@@ -18,6 +18,7 @@ struct settingsFlash_t
     uint16_t    telemetryPeriod;
     float       kI;
     float       kP;
+    float       temperatureOffset;
     uint16_t    crc8;
 };
 
