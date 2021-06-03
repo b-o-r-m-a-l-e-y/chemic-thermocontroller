@@ -7,6 +7,7 @@ Adafruit_MAX31855 thermocouple(THERMOCOUPLE_NCS_PIN);
 void configureDevice(struct device_t* d)
 {
     Serial.begin(9600);
+    pinMode(HEATERS_PIN, OUTPUT);
     thermocouple.begin();
     configureDimmer(&(d->dimmer));
     // Load settings
