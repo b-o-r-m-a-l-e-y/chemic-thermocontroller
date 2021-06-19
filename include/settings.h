@@ -11,6 +11,11 @@ struct settings_t
     uint8_t     tempControlEnabled;
     uint16_t    magnetPower;
     float       temperatureOffset;
+    uint8_t     linearTemperatureControlFlag;
+    uint64_t    linearTemperatureTime;
+    uint64_t    linearTemperatureMsCounter;
+    float       linearTemperature;
+    float       linearTemperature0;
 };
 
 struct settingsFlash_t

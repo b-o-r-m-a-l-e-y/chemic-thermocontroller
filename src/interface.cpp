@@ -58,12 +58,30 @@ void processSerial(struct device_t* d)
                 // Set magnet power
                 uint16_t magPower;
                 if (sscanf(buffer, "-M %u", &(magPower))) {
-                    d->settings.magnetPower = magPower;
-                    processMagnetPower(d->settings.magnetPower);
-                    Serial.println("ACK");
+                    if (magPower >= 0 && magPower <= 1024) {
+                        d->settings.magnetPower = magPower;
+                        processMagnetPower(d->settings.magnetPower);
+                        Serial.println("ACK");
+                    }
+                    else Serial.println("NACK Bad value");
                 }
                 else Serial.println("NACK");
                 break;
+            }
+            case 'q': {
+                // Linear temperature interpolation mode
+                uint64_t timeInMinutes = 0;
+                float linearTemperature = 0;
+                if (sscanf(buffer, "-q %f %d", &linearTemperature, &timeInMinutes)) {
+                    // Convert minutes to ms
+                    d->settings.linearTemperatureTime = timeInMinutes * 60 * 1000;
+                    d->settings.linearTemperature = linearTemperature;
+                    d->settings.linearTemperature0 = d->settings.requiredTemperature;
+                    d->settings.linearTemperatureMsCounter = 0;
+                    d->settings.linearTemperatureControlFlag = 1;
+                    d->settings.tempControlEnabled = 1;
+                }
+                else Serial.println("NACK");
             }
             case 'p': {
                 // Set P coefficient

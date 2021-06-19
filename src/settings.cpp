@@ -61,6 +61,7 @@ void loadDefaultSettings(struct settings_t* s, struct regulator_t* r)
     s->tempControlEnabled = 0;
     s->requiredTemperature = 20.0;
     s->temperatureOffset = 0.0;
+    s->linearTemperatureControlFlag = 0;
     r->kP = 0.5;
     r->kI = 0.1;
     r->interval = 20;
@@ -77,6 +78,7 @@ void loadSettingsFromFlash(struct settings_t* s, struct regulator_t* r)
         r->kP = fromFlash.kP;
         r->kI = fromFlash.kI;
     }
+    else loadDefaultSettings(s, r);
 }
 
 void saveSettingsInFlash(struct settings_t* s, struct regulator_t* r)

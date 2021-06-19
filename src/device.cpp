@@ -8,15 +8,13 @@ void configureDevice(struct device_t* d)
 {
     Serial.begin(9600);
     pinMode(HEATERS_PIN, OUTPUT);
+    pinMode(MAGNET_PIN, OUTPUT);
     thermocouple.begin();
     configureDimmer(&(d->dimmer));
     // Load settings
     loadDefaultSettings(&(d->settings), &(d->regulator));
     configureScheduler(d);
     configureRegulator(&(d->regulator), DEFAULT_KP, DEFAULT_KI, DEFAULT_T);
-    // Just for first tests
-    d->dimmer.requriedPowerValue = 200;
-    analogWrite(9, 220);
     Timer1.initialize(1000);
     Timer1.attachInterrupt(timerCallback);
     Timer1.start();
@@ -45,7 +43,8 @@ void mainLoop(struct device_t* d)
         }
         if (d->pSheduler->measurementTask) {
             temperatureMeasurement(d);
-            //updateRegulator(&(device.regulator), device.settings.requiredTemperature, device.actualTemperature);
+            processLinearTemperature(d);
+            updateRegulator(&(d->regulator), d->settings.requiredTemperature, d->actualTemperature);
             d->pSheduler->measurementTask = 0;
         }
     }
@@ -56,4 +55,16 @@ void processMagnetPower(uint16_t powerValue)
     if (powerValue == 0) Timer1.disablePwm(MAGNET_PIN);
     else if (powerValue >= 1024) Timer1.pwm(MAGNET_PIN, 1024);
     else Timer1.pwm(MAGNET_PIN, powerValue);
+}
+
+void processLinearTemperature(struct device_t* d)
+{
+    if (d->settings.linearTemperatureControlFlag) {
+        if (d->settings.linearTemperatureMsCounter <= d->settings.linearTemperatureTime) {
+            float k = (d->settings.linearTemperature - d->settings.linearTemperature0) / d->settings.linearTemperatureTime;
+            d->settings.requiredTemperature = k * d->settings.linearTemperatureMsCounter + d->settings.linearTemperature0;
+            d->settings.linearTemperatureMsCounter += 200;
+        }
+        else d->settings.linearTemperatureControlFlag = 0;
+    }
 }
