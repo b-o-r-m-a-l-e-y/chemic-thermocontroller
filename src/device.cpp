@@ -11,10 +11,9 @@ void configureDevice(struct device_t* d)
     pinMode(MAGNET_PIN, OUTPUT);
     thermocouple.begin();
     configureDimmer(&(d->dimmer));
-    // Load settings
-    loadDefaultSettings(&(d->settings), &(d->regulator));
+    loadSettingsFromFlash(&(d->settings), &(d->regulator));
     configureScheduler(d);
-    configureRegulator(&(d->regulator), DEFAULT_KP, DEFAULT_KI, DEFAULT_T);
+    configureRegulator(&(d->regulator), DEFAULT_T);
     Timer1.initialize(1000);
     Timer1.attachInterrupt(timerCallback);
     Timer1.start();

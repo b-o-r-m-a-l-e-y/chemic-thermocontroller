@@ -4,6 +4,8 @@
 #include "stdint.h"
 #include "regulator.h"
 
+#define VERSION_SW "0.0.1"
+
 struct settings_t
 {
     uint16_t    telemetryPeriod;
@@ -18,13 +20,13 @@ struct settings_t
     float       linearTemperature0;
 };
 
-struct settingsFlash_t
+struct __attribute__((__packed__)) settingsFlash_t
 {
     uint16_t    telemetryPeriod;
     float       kI;
     float       kP;
     float       temperatureOffset;
-    uint16_t    crc8;
+    uint8_t     crc8;
 };
 
 void loadDefaultSettings(struct settings_t*, struct regulator_t*);

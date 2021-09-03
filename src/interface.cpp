@@ -26,10 +26,10 @@ void processSerial(struct device_t* d)
             }
             case 't': {
                 // Configure temperature
-                float reqTemp;
-                sscanf(buffer, "-t %f", &reqTemp);
-                if (reqTemp > 1.0 && reqTemp < 200.0) {
-                    d->settings.requiredTemperature = reqTemp;
+                int16_t reqTemp;
+                sscanf(buffer, "-t %d", &reqTemp);
+                if (reqTemp > 1 && reqTemp < 200) {
+                    d->settings.requiredTemperature = float(reqTemp);
                     Serial.println("ACK");
                 }
                 else Serial.println("NACK");
@@ -37,9 +37,9 @@ void processSerial(struct device_t* d)
             }
             case 'o': {
                 // Set temperature offset
-                float temperatureOffset;
-                if (sscanf(buffer, "-o %f", &temperatureOffset)) {
-                    d->settings.temperatureOffset = temperatureOffset;
+                int16_t temperatureOffset;
+                if (sscanf(buffer, "-o %d", &temperatureOffset)) {
+                    d->settings.temperatureOffset = float(temperatureOffset);
                     Serial.println("ACK");
                 }
                 else Serial.println("NACK");
@@ -70,24 +70,25 @@ void processSerial(struct device_t* d)
             }
             case 'q': {
                 // Linear temperature interpolation mode
-                uint64_t timeInMinutes = 0;
-                float linearTemperature = 0;
-                if (sscanf(buffer, "-q %f %d", &linearTemperature, &timeInMinutes)) {
+                uint16_t timeInMinutes = 0;
+                int16_t linearTemperature = 0;
+                if (sscanf(buffer, "-q %d %d", &linearTemperature, &timeInMinutes)) {
                     // Convert minutes to ms
                     d->settings.linearTemperatureTime = timeInMinutes * 60 * 1000;
-                    d->settings.linearTemperature = linearTemperature;
+                    d->settings.linearTemperature = float(linearTemperature);
                     d->settings.linearTemperature0 = d->settings.requiredTemperature;
                     d->settings.linearTemperatureMsCounter = 0;
                     d->settings.linearTemperatureControlFlag = 1;
                     d->settings.tempControlEnabled = 1;
+                    Serial.println("ACK");
                 }
                 else Serial.println("NACK");
             }
             case 'p': {
                 // Set P coefficient
-                float pCoef;
-                if (sscanf(buffer, "-p %f", &pCoef)) {
-                    d->regulator.kP = pCoef;
+                int16_t pCoef;
+                if (sscanf(buffer, "-p %d", &pCoef)) {
+                    d->regulator.kP = float(pCoef)/1000.0;
                     Serial.println("ACK");
                 }
                 else Serial.println("NACK");
@@ -95,9 +96,9 @@ void processSerial(struct device_t* d)
             }
             case 'i': {
                 // Set I coefficient
-                float iCoef;
-                if (sscanf(buffer, "-p %f", &iCoef)) {
-                    d->regulator.kI = iCoef;
+                int16_t iCoef;
+                if (sscanf(buffer, "-i %d", &iCoef)) {
+                    d->regulator.kI = float(iCoef)/1000.0;
                     Serial.println("ACK");
                 }
                 else Serial.println("NACK");
@@ -132,6 +133,8 @@ void sendTelemetry(struct device_t* d)
 void sendSettings(struct device_t *d)
 {
     char buffer[128];
+    sprintf(buffer, "Version SW: %s\r\n", VERSION_SW);
+    Serial.print(buffer);
     sprintf(buffer, "Period: %d\r\n", d->settings.telemetryPeriod);
     Serial.print(buffer);
     sprintf(buffer, "Mag Power: %d\r\n", d->settings.magnetPower);
@@ -142,5 +145,12 @@ void sendSettings(struct device_t *d)
     Serial.print(buffer);
     dtostrf(d->regulator.kI, 5, 5, coefS);
     sprintf(buffer, "kI: %s\r\n", coefS);
+    Serial.print(buffer);
+    char temp[16];
+    dtostrf(d->settings.requiredTemperature, 5, 5, temp);
+    sprintf(buffer, "Req. temp: %s\r\n", temp);
+    Serial.print(buffer);
+    dtostrf(d->settings.temperatureOffset, 5, 5, temp);
+    sprintf(buffer, "Offset. temp: %s\r\n", temp);
     Serial.print(buffer);
 }

@@ -1,9 +1,7 @@
 #include "regulator.h"
 
-void configureRegulator(struct regulator_t* r, float kI, float kP, float interval)
+void configureRegulator(struct regulator_t* r, float interval)
 {
-    r->kI = kI;
-    r->kP = kP;
     r->interval = interval;
     r->integratedValue = 0;
     r->output = 0;
