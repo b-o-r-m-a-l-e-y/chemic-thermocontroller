@@ -30,6 +30,7 @@ void processSerial(struct device_t* d)
                 sscanf(buffer, "-t %d", &reqTemp);
                 if (reqTemp > 1 && reqTemp < 200) {
                     d->settings.requiredTemperature = float(reqTemp);
+                    if (!d->settings.linearTemperatureControlFlag) d->regulator.integratedValue = 0;
                     Serial.println("ACK");
                 }
                 else Serial.println("NACK");
@@ -86,9 +87,9 @@ void processSerial(struct device_t* d)
             }
             case 'p': {
                 // Set P coefficient
-                int16_t pCoef;
+                int pCoef;
                 if (sscanf(buffer, "-p %d", &pCoef)) {
-                    d->regulator.kP = float(pCoef)/1000.0;
+                    d->regulator.kP = ((float)pCoef)/1000.0;
                     Serial.println("ACK");
                 }
                 else Serial.println("NACK");
@@ -96,9 +97,9 @@ void processSerial(struct device_t* d)
             }
             case 'i': {
                 // Set I coefficient
-                int16_t iCoef;
+                int iCoef;
                 if (sscanf(buffer, "-i %d", &iCoef)) {
-                    d->regulator.kI = float(iCoef)/1000.0;
+                    d->regulator.kI = ((float)iCoef)/1000.0;
                     Serial.println("ACK");
                 }
                 else Serial.println("NACK");
@@ -112,6 +113,14 @@ void processSerial(struct device_t* d)
                 saveSettingsInFlash(&(d->settings), &(d->regulator));
                 Serial.println("ACK");
                 break;
+            case 'd': {
+                // Set temperature power
+                uint8_t powerDimmer = 0;
+                sscanf(buffer, "-d %u", &powerDimmer);
+                d->dimmer.requriedPowerValue = powerDimmer;
+                Serial.println("ACK");
+                break;
+            }
             default:
                 Serial.println("NACK");
             }

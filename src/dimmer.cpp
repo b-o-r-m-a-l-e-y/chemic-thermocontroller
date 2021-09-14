@@ -22,7 +22,7 @@ void processDimmerMeasurements(struct dimmerConf_t* d)
     // Really we need this if?
     //if (d->lastPinState != pinState)
     if (d->requriedPowerValue == 0) digitalWrite(HEATERS_PIN, 0);
-    else if (d->requriedPowerValue == 1) digitalWrite(HEATERS_PIN, 1);
+    else if (d->requriedPowerValue == 255) digitalWrite(HEATERS_PIN, 1);
     else digitalWrite(HEATERS_PIN, pinState);
     //d->lastPinState = pinState;
     d->lastIdealValue = idealValue;

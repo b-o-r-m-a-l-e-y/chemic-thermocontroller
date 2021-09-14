@@ -14,6 +14,7 @@ void configureDevice(struct device_t* d)
     loadSettingsFromFlash(&(d->settings), &(d->regulator));
     configureScheduler(d);
     configureRegulator(&(d->regulator), DEFAULT_T);
+    d->settings.tempControlEnabled = 0;
     Timer1.initialize(1000);
     Timer1.attachInterrupt(timerCallback);
     Timer1.start();
@@ -22,8 +23,10 @@ void configureDevice(struct device_t* d)
 
 void temperatureMeasurement(struct device_t* d)
 {
-    d->actualTemperature = (float) thermocouple.readCelsius();
-    d->internalTemperature = (float) thermocouple.readInternal();
+    float externalTemp = (float) thermocouple.readCelsius();
+    if (!isnan(externalTemp)) d->actualTemperature = externalTemp;
+    float internalTemperature = (float) thermocouple.readInternal();
+    if (!isnan(internalTemperature)) d->internalTemperature = internalTemperature;
     d->flagsThermocouple = thermocouple.readError();
 }
 
@@ -43,7 +46,10 @@ void mainLoop(struct device_t* d)
         if (d->pSheduler->measurementTask) {
             temperatureMeasurement(d);
             processLinearTemperature(d);
-            updateRegulator(&(d->regulator), d->settings.requiredTemperature, d->actualTemperature);
+            if (d->settings.tempControlEnabled) {
+                d->dimmer.requriedPowerValue = updateRegulator(&(d->regulator),
+                                d->settings.requiredTemperature, d->actualTemperature);
+            }
             d->pSheduler->measurementTask = 0;
         }
     }
