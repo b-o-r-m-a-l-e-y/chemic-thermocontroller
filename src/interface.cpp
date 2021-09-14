@@ -89,7 +89,7 @@ void processSerial(struct device_t* d)
                 // Set P coefficient
                 int pCoef;
                 if (sscanf(buffer, "-p %d", &pCoef)) {
-                    d->regulator.kP = ((float)pCoef)/1000.0;
+                    d->regulator.kP = ((float)pCoef)/10000.0;
                     Serial.println("ACK");
                 }
                 else Serial.println("NACK");
@@ -99,7 +99,7 @@ void processSerial(struct device_t* d)
                 // Set I coefficient
                 int iCoef;
                 if (sscanf(buffer, "-i %d", &iCoef)) {
-                    d->regulator.kI = ((float)iCoef)/1000.0;
+                    d->regulator.kI = ((float)iCoef)/10000.0;
                     Serial.println("ACK");
                 }
                 else Serial.println("NACK");
