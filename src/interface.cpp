@@ -28,7 +28,7 @@ void processSerial(struct device_t* d)
                 // Configure temperature
                 int16_t reqTemp;
                 sscanf(buffer, "-t %d", &reqTemp);
-                if (reqTemp > 1 && reqTemp < 200) {
+                if (reqTemp >= 0 && reqTemp < 300) {
                     d->settings.requiredTemperature = float(reqTemp);
                     if (!d->settings.linearTemperatureControlFlag) d->regulator.integratedValue = 0;
                     Serial.println("ACK");
@@ -49,7 +49,7 @@ void processSerial(struct device_t* d)
             case 'a':
                 // Set autocontrol mode
                 uint8_t mode;
-                if (sscanf(buffer, "-a %u", &(mode))) {
+                if (sscanf(buffer, "-a %d", &(mode))) {
                     d->settings.tempControlEnabled = mode;
                     Serial.println("ACK");
                 }
