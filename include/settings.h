@@ -14,8 +14,8 @@ struct settings_t
     uint16_t    magnetPower;
     float       temperatureOffset;
     uint8_t     linearTemperatureControlFlag;
-    uint64_t    linearTemperatureTime;
-    uint64_t    linearTemperatureMsCounter;
+    uint32_t    linearTemperatureTime;
+    uint32_t    linearTemperatureMsCounter;
     float       linearTemperature;
     float       linearTemperature0;
 };

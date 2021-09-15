@@ -48,8 +48,8 @@ void processSerial(struct device_t* d)
             }
             case 'a':
                 // Set autocontrol mode
-                uint8_t mode;
-                if (sscanf(buffer, "-a %d", &(mode))) {
+                int8_t mode;
+                if (sscanf(buffer, "-a %d", &mode)) {
                     d->settings.tempControlEnabled = mode;
                     Serial.println("ACK");
                 }
@@ -71,19 +71,25 @@ void processSerial(struct device_t* d)
             }
             case 'q': {
                 // Linear temperature interpolation mode
-                uint16_t timeInMinutes = 0;
-                int16_t linearTemperature = 0;
-                if (sscanf(buffer, "-q %d %d", &linearTemperature, &timeInMinutes)) {
+                uint32_t timeInMinutes = 0;
+                int32_t linearTemperature = 0;
+                if (sscanf(buffer, "-q %d_%u_", &linearTemperature, &timeInMinutes)) {
                     // Convert minutes to ms
-                    d->settings.linearTemperatureTime = timeInMinutes * 60 * 1000;
-                    d->settings.linearTemperature = float(linearTemperature);
-                    d->settings.linearTemperature0 = d->settings.requiredTemperature;
-                    d->settings.linearTemperatureMsCounter = 0;
-                    d->settings.linearTemperatureControlFlag = 1;
-                    d->settings.tempControlEnabled = 1;
-                    Serial.println("ACK");
+                    if (timeInMinutes > 0) {
+                        d->settings.linearTemperatureTime = timeInMinutes * 60 * 1000;
+                        d->settings.linearTemperature = float(linearTemperature);
+                        d->settings.linearTemperature0 = d->actualTemperature;
+                        d->settings.linearTemperatureMsCounter = 0;
+                        d->settings.tempControlEnabled = 1;
+                        d->settings.linearTemperatureControlFlag = 1;
+                        Serial.print(d->settings.linearTemperatureTime);
+                        Serial.print("\r\n");
+                        Serial.println("ACK");
+                    }
+                    else Serial.println("Bad time value");
                 }
                 else Serial.println("NACK");
+                break;
             }
             case 'p': {
                 // Set P coefficient

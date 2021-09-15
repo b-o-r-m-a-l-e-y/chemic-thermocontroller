@@ -15,6 +15,8 @@ void configureDevice(struct device_t* d)
     configureScheduler(d);
     configureRegulator(&(d->regulator), DEFAULT_T);
     d->settings.tempControlEnabled = 0;
+    d->settings.requiredTemperature = 0.0;
+    sendSettings(d);
     Timer1.initialize(1000);
     Timer1.attachInterrupt(timerCallback);
     Timer1.start();
@@ -66,8 +68,13 @@ void processLinearTemperature(struct device_t* d)
 {
     if (d->settings.linearTemperatureControlFlag) {
         if (d->settings.linearTemperatureMsCounter <= d->settings.linearTemperatureTime) {
-            float k = (d->settings.linearTemperature - d->settings.linearTemperature0) / d->settings.linearTemperatureTime;
-            d->settings.requiredTemperature = k * d->settings.linearTemperatureMsCounter + d->settings.linearTemperature0;
+            float k = (d->settings.linearTemperature - d->settings.linearTemperature0) / float(d->settings.linearTemperatureTime);
+            char buffer[128];
+            char coefS[16];
+            dtostrf(k, 5, 5, coefS);
+            sprintf(buffer, "k: %s\r\n", coefS);
+            Serial.print(buffer);
+            d->settings.requiredTemperature = k * float(d->settings.linearTemperatureMsCounter) + d->settings.linearTemperature0;
             d->settings.linearTemperatureMsCounter += 200;
         }
         else d->settings.linearTemperatureControlFlag = 0;
